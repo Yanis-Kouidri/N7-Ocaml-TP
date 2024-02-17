@@ -81,7 +81,13 @@ Précondition : n >=0
 Résultat : un entier la nième valeur de la suite de Padovan 
 *)
 
-let padovan n = failwith "TO DO"
+let rec padovan n = 
+	match n with
+		| _ when n < 0 -> failwith "N doit être suppérieur à 0"
+		| 0 -> 0
+		| 1 -> 0
+		| 2 -> 1
+		| _ -> (padovan (n - 2)) + (padovan (n - 3))
 
 let%test _ = padovan 0 = 0
 let%test _ = padovan 1 = 0 
@@ -94,6 +100,32 @@ let%test _ = padovan 7 = 2
 let%test _ = padovan 8 = 2
 let%test _ = padovan 9 = 3
 let%test _ = padovan 10 = 4
+let%test _ = padovan (-0) = 0
+let%test _ = padovan (-8) = failwith "N doit être suppérieur à 0"
+
+let padovan2 n = 
+	let rec aux n n_2 n_3 =
+		match n with
+			| _ when n < 0 -> failwith "N doit être suppérieur à 0"
+			| 0 -> 0
+			| 1 -> 0
+			| 2 -> 1
+			| _ -> n_2 + n_3
+	in aux n (padovan(n - 2)) (padovan (n -3))
+
+let%test _ = padovan2 0 = 0
+let%test _ = padovan2 1 = 0 
+let%test _ = padovan2 2 = 1
+let%test _ = padovan2 3 = 0
+let%test _ = padovan2 4 = 1
+let%test _ = padovan2 5 = 1
+let%test _ = padovan2 6 = 1
+let%test _ = padovan2 7 = 2
+let%test _ = padovan2 8 = 2
+let%test _ = padovan2 9 = 3
+let%test _ = padovan2 10 = 4
+let%test _ = padovan2 (-0) = 0
+let%test _ = padovan2 (-8) = failwith "N doit être suppérieur à 0"
 
 (* Exercice 7 *)
 (* estPremier : int -> bool
@@ -103,7 +135,14 @@ Précondition : n >= 0
 Résultat : l'information de si n est premier ou pas
 *)
 
-let estPremier n = failwith "TO DO"
+let estPremier n = 
+	let rec aux i =
+		match i with
+			| _ when n < 2 -> false
+			| _ when i*i > n -> true
+			| _ when n mod i <> 0 -> aux (i + 1)
+			| _ -> false
+	in aux 2
 
 let%test _ = estPremier 2
 let%test _ = estPremier 3 
