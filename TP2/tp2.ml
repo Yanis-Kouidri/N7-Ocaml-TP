@@ -33,11 +33,14 @@ Paramètre : l, la liste à trier
 Résultat : une liste triée avec les éléments de l
 *)
 
-let rec tri_insertion ordre l = failwith "TO DO"
+let rec tri_insertion ordre l = 
+  match l with 
+  | [] -> []
+  | h::q -> insert ordre h (tri_insertion ordre q)
 
 (* TESTS *)
-let%test _ = tri_insertion (fun x y -> x<y) [] =[]
-let%test _ = tri_insertion (fun x y -> x<y) [4;2;4;3;1] =[1;2;3;4;4]
+let%test _ = tri_insertion (fun x y -> x<y) []=[]
+let%test _ = tri_insertion (fun x y -> x<y) [4;2;4;3;1]=[1;2;3;4;4]
 let%test _ = tri_insertion (fun x y -> x > y) [4;7;2;4;1;2;2;7]=[7;7;4;4;2;2;2;1]
 
 
