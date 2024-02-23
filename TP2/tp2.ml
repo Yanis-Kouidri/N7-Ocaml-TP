@@ -33,10 +33,14 @@ Paramètre : l, la liste à trier
 Résultat : une liste triée avec les éléments de l
 *)
 
-let rec tri_insertion ordre l = 
+(* Vesion fold_right mieux*)
+let rec tri_insertion ordre l = List.fold_right (insert ordre) l []
+
+(*  (* Version match with (moins bien)*)
   match l with 
   | [] -> []
-  | h::q -> insert ordre h (tri_insertion ordre q)
+  | h::q -> insert ordre h (tri_insertion ordre q) 
+*)
 
 (* TESTS *)
 let%test _ = tri_insertion (fun x y -> x<y) []=[]
