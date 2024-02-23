@@ -56,7 +56,11 @@ Paramètre : l, la liste à couper en deux
 Retour : deux listes
 *)
 
-let rec scinde l =  failwith "TO DO"
+let rec scinde l = 
+  match l with
+  | [] -> ([], [])
+  | [elt] -> ([elt], [])
+  | h1::h2::q -> let (l1, l2) = scinde q in (h1::l1, h2::l2)
 
 (* TESTS *)
 (* Peuvent être modifiés selon l'algorithme choisi *)
