@@ -122,7 +122,8 @@ let print_stat (sexe,nom,annee,nb) =
  et construit une liste de quadruplet (sexe,prénom,année,nombre d'affectation)
 *)
 let listStat = 
-  let input = open_in "/home/yanis/Documents/N7/Ocaml/N7-Ocaml-TP/TP2/nat2016.txt" in 
+  (* let input = open_in "/home/yanis/Documents/N7/Ocaml/N7-Ocaml-TP/TP2/nat2016.txt" in  *) (*Laptop N7*)
+  let input = open_in "/home/yanis/N7/Ocaml/N7-Ocaml-TP/TP2/nat2016.txt" in (*PC tour maison*)
   let filebuf = Lexing.from_channel input in
   Parser.main Lexer.token filebuf
   
@@ -131,7 +132,8 @@ let listStat =
  et construit une liste de quadruplets (sexe,prénom,année,nombre d'affectations)
 *)
 let listStatHomme = 
-  let input = open_in "/home/yanis/Documents/N7/Ocaml/N7-Ocaml-TP/TP2/nathomme2016.txt" in
+  (* let input = open_in "/home/yanis/Documents/N7/Ocaml/N7-Ocaml-TP/TP2/nathomme2016.txt" in *)
+  let input = open_in "/home/yanis/N7/Ocaml/N7-Ocaml-TP/TP2/nathomme2016.txt" in
   let filebuf = Lexing.from_channel input in
   Parser.main Lexer.token filebuf
   
