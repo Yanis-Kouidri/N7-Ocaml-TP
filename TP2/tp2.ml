@@ -76,7 +76,18 @@ Paramètre : l1 et l2, les deux listes triées
 Résultat : une liste triée avec les éléments de l1 et l2
 *)
 
-let rec fusionne ordre l1 l2 = failwith "TO DO"
+let rec fusionne ordre l1 l2 =
+  match (l1, l2) with
+  | ([], []) -> []
+  | ([e], []) -> [e]
+  | ([], [e]) -> [e]
+  | (h1::q1, h2::q2) -> if ordre h1 h2 
+                          then h1::fusionne ordre q1 l2
+                        else h2::fusionne ordre l1 q2
+  | (_::_, []) -> l1
+  | ([], _::_) -> l2
+
+
 
 (*TESTS*)
 let%test _ = fusionne (fun x y -> x<y) [1;2;4;5;6] [3;4] = [1;2;3;4;4;5;6]
