@@ -152,5 +152,10 @@ let listStatHomme =
   let filebuf = Lexing.from_channel input in
   Parser.main Lexer.token filebuf
   
+let ordreAlpha (_,nom1,_,_) (_,nom2,_,_) = nom1 < nom2
+
+let listStatHommeTrie = tri_insertion ordreAlpha listStatHomme
 
 (*  Les contrats et les tests des fonctions suivantes sont à écrire *)
+
+(* Exercice n°8 *)
