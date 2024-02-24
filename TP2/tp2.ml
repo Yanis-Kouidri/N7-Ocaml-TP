@@ -11,9 +11,10 @@ Paramètre : l, la liste triée dans laquelle ajouter elt
 Résultat : une liste triée avec les éléments de l, plus elt
 *)
 
+(*Auteur : Yanis Kouidri*)
 let rec insert ordre elt l = 
   match l with 
-    | [] -> [elt]
+    | [] -> [elt] 
     | t::q -> if ordre elt t
                 then elt::t::q
               else t::insert ordre elt q
@@ -34,7 +35,7 @@ Résultat : une liste triée avec les éléments de l
 *)
 
 (* Vesion fold_right mieux*)
-let rec tri_insertion ordre l = List.fold_right (insert ordre) l []
+let tri_insertion ordre l = List.fold_right (insert ordre) l []
 
 (*  (* Version match with (moins bien)*)
   match l with 
@@ -159,3 +160,30 @@ let listStatHommeTrie = tri_insertion ordreAlpha listStatHomme
 (*  Les contrats et les tests des fonctions suivantes sont à écrire *)
 
 (* Exercice n°8 *)
+
+
+(*  Tri fusion V2, version récursive terminale **)
+
+(* CONTRAT
+Fonction qui décompose une liste en deux listes de tailles égales à plus ou moins un élément
+Paramètre : l, la liste à couper en deux
+Retour : deux listes
+*)
+
+let  scindeV2 l =
+  let rec aux i listUpadted =
+    match listUpadted with
+    | [] -> ([], [])
+    | h::q -> if i <= (((List.length l ) + 1) / 2)
+                then let (l1, l2) = aux (i+1) q in (h::l1, l2)
+              else let (l1, l2) = aux (i+1) q in (l1, h::l2)
+  in aux 1 l 
+
+  
+(* TESTS *)
+let%test _ = scindeV2 [1;2;3;4] = ([1;2],[3;4])
+let%test _ = scindeV2 [1;2;3;4;5] = ([1;2;3],[4;5])
+let%test _ = scindeV2 [1;2;3;4;5;6;7;8] = ([1;2;3;4],[5;6;7;8])
+let%test _ = scindeV2 [1;2;3] = ([1;2],[3])
+let%test _ = scindeV2 [1] = ([1],[])
+let%test _ = scindeV2 [] = ([],[])
