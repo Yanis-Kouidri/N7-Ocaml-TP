@@ -108,7 +108,11 @@ Paramètre : l, la liste à trier
 Résultat : une liste triée avec les éléments de l
 *)
 
-let rec tri_fusion ordre l =failwith "TO DO"
+let rec tri_fusion ordre l = 
+  match l with
+  | [] -> []
+  | [e] -> [e]
+  | l -> let (l1, l2) = scinde l in fusionne ordre (tri_fusion ordre l1) (tri_fusion ordre l2)
 
 
 (* TESTS *)
