@@ -32,12 +32,26 @@ let%test _ = gray_code 3 = [[0; 0; 0]; [0; 0; 1]; [0; 1; 1]; [0; 1; 0]; [1; 1; 0
 (*** Combinaisons d'une liste ***)
 
 (* CONTRAT 
-TO DO
+Fonction qui renvoie une liste de toutes les combinaisons possible avec k élément
+Paramètre k : nombre d'élément de chaque combinaison
+Paramètre l : liste à partir de laquelle créer les combinaisons
+Retour : une liste de liste danq laqulle chaque liste est une combinaison de k élément
 *)
-let combinaison k l = failwith "TO DO"
+let rec combinaison k l = 
+  match l with
+  | [] -> if k = 0
+            then [[]]
+        else []
+  | h::q -> List.map(fun el -> h::el) (combinaison (k-1) q)@combinaison k q
+
 
 (* TESTS *)
-(* TO DO *)
+let%test _ = combinaison 0 [] = [[]]
+let%test _ = combinaison 3 [] = []
+let%test _ = combinaison 0 [1;2;3;4] = [[]]
+let%test _ = combinaison 3 [1;2;3;4] = [[1;2;3];[1;2;4];[1;3;4];[2;3;4]]
+let%test _ = combinaison 2 [1;2;3;4] = [[1;2];[1;3];[1;4];[2;3];[2;4];[3;4]]
+
 
 
 
