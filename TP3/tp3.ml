@@ -10,7 +10,10 @@ Resultat : le code sous forme de int list list
 *)
 
 
-let gray_code n = failwith "TO DO"
+let rec gray_code n = 
+  if n = 0 
+    then [[]]
+  else List.map(fun el -> 0::el) (gray_code (n-1))@List.map(fun el -> 1::el) (List.rev(gray_code (n-1)))
 
 (* TESTS *)
 let%test _ = gray_code 0 = [[]]
