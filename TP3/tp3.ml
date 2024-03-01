@@ -11,9 +11,11 @@ Resultat : le code sous forme de int list list
 
 
 let rec gray_code n = 
-  if n = 0 
-    then [[]]
-  else List.map(fun el -> 0::el) (gray_code (n-1))@List.map(fun el -> 1::el) (List.rev(gray_code (n-1)))
+    if n = 0 
+      then [[]]
+    else 
+      let n_1_gray = gray_code (n-1) in
+      List.map(fun el -> 0::el) (n_1_gray)@List.map(fun el -> 1::el) (List.rev(n_1_gray))
 
 (* TESTS *)
 let%test _ = gray_code 0 = [[]]
