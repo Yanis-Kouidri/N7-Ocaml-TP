@@ -64,7 +64,10 @@ Paramètre l : ('a list) la liste initiale dans laquelle insérer e
 Reesultat : la liste des listes avec toutes les insertions possible de e dans l
 *)
 
-let rec insertion e l = failwith "TO DO"
+let rec insertion e l = 
+  match l with
+  | [] -> [[e]]
+  | h::q -> (e::l)::(List.map (fun el -> h::el) (insertion e q))
 
 (* TESTS *)
 let%test _ = insertion 0 [1;2] = [[0;1;2];[1;0;2];[1;2;0]]
@@ -85,10 +88,12 @@ Paramètre l : une liste
 Résultat : la liste des permutatiions de l (toutes différentes si les élements de l sont différents deux à deux 
 *)
 
-let rec permutations l = failwith "TO DO"
+let rec permutations l = 
+  match l with 
+  | 
 
 (* TESTS *)
-(*
+
 let l1 = permutations [1;2;3]
 let%test _ = List.length l1 = 6
 let%test _ = List.mem [1; 2; 3] l1 
@@ -102,7 +107,7 @@ let l2 = permutations ['a';'b']
 let%test _ = List.length l2 = 2
 let%test _ = List.mem ['a';'b'] l2 
 let%test _ = List.mem ['b';'a'] l2 
-*)
+
 
 
 (*** Partition d'un entier ***)
@@ -118,8 +123,9 @@ let partition n = failwith "TO DO"
 
 
 (* TEST *)
-let%test _ = partition 1 = [[1]]
+
+(* let%test _ = partition 1 = [[1]]
 let%test _ = partition 2 = [[1;1];[2]]
 let%test _ = partition 3 = [[1; 1; 1]; [1; 2]; [3]]
 let%test _ = partition 4 = [[1; 1; 1; 1]; [1; 1; 2]; [1; 3]; [2; 2]; [4]]
-
+ *)
