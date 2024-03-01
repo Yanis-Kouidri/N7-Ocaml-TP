@@ -11,9 +11,10 @@ Paramètre : l, la liste triée dans laquelle ajouter elt
 Résultat : une liste triée avec les éléments de l, plus elt
 *)
 
+(*Auteur : Yanis Kouidri*)
 let rec insert ordre elt l = 
   match l with 
-    | [] -> [elt]
+    | [] -> [elt] 
     | t::q -> if ordre elt t
                 then elt::t::q
               else t::insert ordre elt q
@@ -34,7 +35,7 @@ Résultat : une liste triée avec les éléments de l
 *)
 
 (* Vesion fold_right mieux*)
-let rec tri_insertion ordre l = List.fold_right (insert ordre) l []
+let tri_insertion ordre l = List.fold_right (insert ordre) l []
 
 (*  (* Version match with (moins bien)*)
   match l with 
@@ -76,7 +77,18 @@ Paramètre : l1 et l2, les deux listes triées
 Résultat : une liste triée avec les éléments de l1 et l2
 *)
 
-let rec fusionne ordre l1 l2 = failwith "TO DO"
+let rec fusionne ordre l1 l2 =
+  match (l1, l2) with
+  | ([], []) -> []
+  | ([e], []) -> [e]
+  | ([], [e]) -> [e]
+  | (h1::q1, h2::q2) -> if ordre h1 h2 
+                          then h1::fusionne ordre q1 l2
+                        else h2::fusionne ordre l1 q2
+  | (_::_, []) -> l1
+  | ([], _::_) -> l2
+
+
 
 (*TESTS*)
 let%test _ = fusionne (fun x y -> x<y) [1;2;4;5;6] [3;4] = [1;2;3;4;4;5;6]
@@ -97,7 +109,11 @@ Paramètre : l, la liste à trier
 Résultat : une liste triée avec les éléments de l
 *)
 
-let rec tri_fusion ordre l =failwith "TO DO"
+let rec tri_fusion ordre l = 
+  match l with
+  | [] -> []
+  | [e] -> [e]
+  | l -> let (l1, l2) = scinde l in fusionne ordre (tri_fusion ordre l1) (tri_fusion ordre l2)
 
 
 (* TESTS *)
@@ -122,7 +138,8 @@ let print_stat (sexe,nom,annee,nb) =
  et construit une liste de quadruplet (sexe,prénom,année,nombre d'affectation)
 *)
 let listStat = 
-  let input = open_in "/home/yanis/Documents/N7/Ocaml/N7-Ocaml-TP/TP2/nat2016.txt" in 
+  (* let input = open_in "/home/yanis/Documents/N7/Ocaml/N7-Ocaml-TP/TP2/nat2016.txt" in  *) (*Laptop N7*)
+  let input = open_in "/home/yanis/N7/Ocaml/N7-Ocaml-TP/TP2/nat2016.txt" in (*PC tour maison*)
   let filebuf = Lexing.from_channel input in
   Parser.main Lexer.token filebuf
   
@@ -131,9 +148,42 @@ let listStat =
  et construit une liste de quadruplets (sexe,prénom,année,nombre d'affectations)
 *)
 let listStatHomme = 
-  let input = open_in "/home/yanis/Documents/N7/Ocaml/N7-Ocaml-TP/TP2/nathomme2016.txt" in
+  (* let input = open_in "/home/yanis/Documents/N7/Ocaml/N7-Ocaml-TP/TP2/nathomme2016.txt" in *)
+  let input = open_in "/home/yanis/N7/Ocaml/N7-Ocaml-TP/TP2/nathomme2016.txt" in
   let filebuf = Lexing.from_channel input in
   Parser.main Lexer.token filebuf
   
+let ordreAlpha (_,nom1,_,_) (_,nom2,_,_) = nom1 < nom2
+
+let listStatHommeTrie = tri_insertion ordreAlpha listStatHomme
 
 (*  Les contrats et les tests des fonctions suivantes sont à écrire *)
+
+(* Exercice n°8 *)
+
+
+(*  Tri fusion V2, version récursive terminale **)
+
+(* CONTRAT
+Fonction qui décompose une liste en deux listes de tailles égales à plus ou moins un élément
+Paramètre : l, la liste à couper en deux
+Retour : deux listes
+*)
+
+let  scindeV2 l =
+  let rec aux i listUpadted =
+    match listUpadted with
+    | [] -> ([], [])
+    | h::q -> if i <= (((List.length l ) + 1) / 2)
+                then let (l1, l2) = aux (i+1) q in (h::l1, l2)
+              else let (l1, l2) = aux (i+1) q in (l1, h::l2)
+  in aux 1 l 
+
+  
+(* TESTS *)
+let%test _ = scindeV2 [1;2;3;4] = ([1;2],[3;4])
+let%test _ = scindeV2 [1;2;3;4;5] = ([1;2;3],[4;5])
+let%test _ = scindeV2 [1;2;3;4;5;6;7;8] = ([1;2;3;4],[5;6;7;8])
+let%test _ = scindeV2 [1;2;3] = ([1;2],[3])
+let%test _ = scindeV2 [1] = ([1],[])
+let%test _ = scindeV2 [] = ([],[])
