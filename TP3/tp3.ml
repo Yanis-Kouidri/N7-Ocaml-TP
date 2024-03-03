@@ -1,5 +1,7 @@
 (****** Algorithmes combinatoires et listes ********)
 
+(** TP de Yanis Kouidri | Mars 2024*)
+
 
 (*** Code binaires de Gray ***)
 
@@ -32,10 +34,11 @@ let%test _ = gray_code 3 = [[0; 0; 0]; [0; 0; 1]; [0; 1; 1]; [0; 1; 0]; [1; 1; 0
 (*** Combinaisons d'une liste ***)
 
 (* CONTRAT 
-Fonction qui renvoie une liste de toutes les combinaisons possible avec k élément
-Paramètre k : nombre d'élément de chaque combinaison
-Paramètre l : liste à partir de laquelle créer les combinaisons
-Retour : une liste de liste danq laqulle chaque liste est une combinaison de k élément
+Fonction qui prend en paramère un entier k positif et une liste et renvoie toutes les combinaisons de k valeurs de la liste l
+Préconditon k >=0 et k 
+Paramètre k : cardinalité de chaque combinaison générée par le fonction
+Paramètre l : Liste dans laquelle les combinaisons seront créées
+Résultat : Une liste de listes ou chaque liste est une combinaison. Cette liste est exhaustive. Les combinaison sont données dans le même ordre que la liste d'entrée
 *)
 let rec combinaison k l = 
   match l with
@@ -47,10 +50,16 @@ let rec combinaison k l =
 
 (* TESTS *)
 let%test _ = combinaison 0 [] = [[]]
-let%test _ = combinaison 3 [] = []
+let%test _ = combinaison 1 [] = []
+let%test _ = combinaison 1 [5] = [[5]]
 let%test _ = combinaison 0 [1;2;3;4] = [[]]
-let%test _ = combinaison 3 [1;2;3;4] = [[1;2;3];[1;2;4];[1;3;4];[2;3;4]]
-let%test _ = combinaison 2 [1;2;3;4] = [[1;2];[1;3];[1;4];[2;3];[2;4];[3;4]]
+let%test _ = combinaison 1 [1;2;3;4] = [[1];[2];[3];[4]]
+let%test _ = combinaison 2 [1;2;3;4] = [[1;2]; [1;3]; [1;4]; [2;3]; [2;4]; [3;4]]
+let%test _ = combinaison 3 [1;2;3;4] = [[1;2;3]; [1;2;4]; [1;3;4]; [2;3;4]]
+let%test _ = combinaison 4 [1;2;3;4] = [[1;2;3;4]]
+let%test _ = combinaison 5 [1;2;3;4] = []
+let%test _ = combinaison 54 [1;2;3;4] = []
+
 
 
 
@@ -90,7 +99,8 @@ Résultat : la liste des permutatiions de l (toutes différentes si les élement
 
 let rec permutations l = 
   match l with 
-  | 
+  | [] -> [[]]
+  | h::q -> List.flatten (List.map (insertion h) (permutations q))
 
 (* TESTS *)
 
@@ -119,7 +129,7 @@ Préconditions : n >0
 Retour : les partitions de n
 *)
 
-let partition n = failwith "TO DO"
+(* let partition n = failwith "TO DO" *)
 
 
 (* TEST *)
