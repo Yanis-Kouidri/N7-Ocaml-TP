@@ -20,14 +20,6 @@ type ('a,'b) trie = Trie of ('b arbre) * ('a -> 'b list) * ('b list -> 'a)
 (******************************************************************************)
 let nouveau fd fr = Trie(Noeud(false,[]), fd, fr)
 
-(******************************************************************************)
-(*   fonction d'appartenance d'un élément à un trie                           *)
-(*   signature  : appartient : 'a -> ('a, 'b) trie -> bool = <fun>            *)
-(*   paramètres : - un mot                                                    *)
-(*                - un trie                                                   *)
-(*   résultat   : le résultat booléen du test                                 *)
-(******************************************************************************)
-let appartient mot trie = failwith "TO DO appartient"
 
 (******************************************************************************)
 (*   fonction d'ajout d'un élément dans un trie                               *)
@@ -39,11 +31,32 @@ let appartient mot trie = failwith "TO DO appartient"
 let ajout mot (Trie(arbre, decompose, recompose)) =
   Trie (ajout_arbre (decompose mot) arbre,decompose,recompose)
 
+(******************************************************************************)
+(*   fonction d'appartenance d'un élément à un trie                           *)
+(*   signature  : appartient : 'a -> ('a, 'b) trie -> bool = <fun>            *)
+(*   paramètres : - un mot                                                    *)
+(*                - un trie                                                   *)
+(*   résultat   : le résultat booléen du test                                 *)
+(******************************************************************************)
+let appartient mot (Trie(arbre, decompose, _)) = 
+  appartient_arbre (decompose mot) arbre
+
 (*  Pour les tests *)
 let trie_sujet =
   List.fold_right ajout
     ["bas"; "bât"; "de"; "la"; "lai"; "laid"; "lait"; "lard"; "le"; "les"; "long"]
     (nouveau decompose_chaine recompose_chaine)
+
+let%test _ = appartient "bas" trie_sujet = true
+let%test _ = appartient "base" trie_sujet = false
+let%test _ = appartient "bat" trie_sujet = false
+let%test _ = appartient "bât" trie_sujet = true
+let%test _ = appartient "long" trie_sujet = true
+let%test _ = appartient "longe" trie_sujet = false
+let%test _ = appartient "lon" trie_sujet = false
+let%test _ = appartient "" trie_sujet = false
+let%test _ = appartient "a" trie_sujet = false
+
 
 (******************************************************************************)
 (*   fonction de retrait d'un élément d'un trie                               *)
