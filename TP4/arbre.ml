@@ -94,3 +94,15 @@ let arbre_sujet3 =
 
 let%test _ = arbre_sujet2 = arbre_sujet
 let%test _ = arbre_sujet3 = arbre_sujet
+
+(******************************************************************************)
+(*   fonction de retrait qui enlève un élément d'un arbre n-aire.             *)
+(*   signature  : retrait_arbre : 'a list -> 'a arbre -> 'a arbre             *)
+(*   paramètres : - elt : elément de l'arbre à retirer                        *)
+(*                - arbre : arbre dans lequel retirer l'élément               *)
+(*   résultat   : l'arbre n-aire sans l'élement s'il existe, sinon le même arbre *)
+(******************************************************************************)
+let rec retrait_arbre elt (Noeud(fin, bl)) =
+   if appartient_arbre elt (Noeud(fin, bl))
+      then (* TODO *)
+   else Noeud(fin, bl)
