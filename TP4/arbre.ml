@@ -95,14 +95,30 @@ let arbre_sujet3 =
 let%test _ = arbre_sujet2 = arbre_sujet
 let%test _ = arbre_sujet3 = arbre_sujet
 
-(******************************************************************************)
-(*   fonction de retrait qui enlève un élément d'un arbre n-aire.             *)
-(*   signature  : retrait_arbre : 'a list -> 'a arbre -> 'a arbre             *)
-(*   paramètres : - elt : elément de l'arbre à retirer                        *)
-(*                - arbre : arbre dans lequel retirer l'élément               *)
+(*********************************************************************************)
+(*   fonction de retrait qui enlève un élément d'un arbre n-aire.                *)
+(*   signature  : retrait_arbre : 'a list -> 'a arbre -> 'a arbre                *)
+(*   paramètres : - elt : élément de l'arbre à retirer                           *)
+(*                - arbre : arbre dans lequel retirer l'élément                  *)
 (*   résultat   : l'arbre n-aire sans l'élement s'il existe, sinon le même arbre *)
-(******************************************************************************)
+(*********************************************************************************)
 let rec retrait_arbre elt (Noeud(fin, bl)) =
-   if appartient_arbre elt (Noeud(fin, bl))
-      then (* TODO *)
-   else Noeud(fin, bl)
+   match elt with
+      | [] -> Noeud(false, bl)
+      | h::q -> match recherche h bl with 
+               | None -> Noeud(fin, bl)
+               | Some newNode -> Noeud(fin, maj h (retrait_arbre q newNode) bl)
+
+
+let%test _ =  retrait_arbre [] arbre_sujet = arbre_sujet
+let%test _ =  retrait_arbre [] arbre_sujet2 = arbre_sujet2
+let%test _ =  retrait_arbre [] arbre_sujet3 = arbre_sujet3
+
+
+let%test _ =  retrait_arbre ['c';'o';'c';'a'] arbre_sujet = arbre_sujet
+let%test _ =  retrait_arbre ['c';'o';'c';'a'] arbre_sujet2 = arbre_sujet2
+let%test _ =  retrait_arbre ['c';'o';'c';'a'] arbre_sujet3 = arbre_sujet3
+
+let%test _ =  not (appartient_arbre ['b';'a';'s'] (retrait_arbre ['b';'a';'s'] arbre_sujet2))
+let%test _ =  appartient_arbre ['b';'a';'t'] (retrait_arbre ['b';'a';'s'] arbre_sujet2)
+
