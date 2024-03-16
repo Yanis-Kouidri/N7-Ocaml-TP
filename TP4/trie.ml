@@ -65,7 +65,20 @@ let%test _ = appartient "a" trie_sujet = false
 (*                - un trie                                                   *)
 (*   résultat   : le trie avec le mot retiré                                  *)
 (******************************************************************************)
-let retrait mot trie = failwith "TO DO retrait"
+let retrait mot (Trie(arbre, decompose, recompose)) = 
+  Trie (retrait_arbre (decompose mot) arbre, decompose, recompose)
+
+let%test _ = appartient "bas" trie_sujet = true
+let%test _ = appartient "bas" (retrait "bas" trie_sujet) = false
+let%test _ = appartient "bat" (retrait "bas" trie_sujet) = false
+let%test _ = appartient "base" (retrait "bas" trie_sujet) = false
+let%test _ = appartient "bât" (retrait "bas" trie_sujet) = true
+let%test _ = appartient "de" (retrait "bas" trie_sujet) = true
+let%test _ = appartient "la" (retrait "bas" trie_sujet) = true
+let%test _ = appartient "lai" (retrait "bas" trie_sujet) = true
+let%test _ = appartient "lai" (retrait "lai" trie_sujet) = false
+let%test _ = appartient "bas" (retrait "lai" trie_sujet) = true
+
 
 (******************************************************************************)
 (*   fonction interne au Module qui génère la liste de tous les mots          *)
