@@ -96,4 +96,13 @@ let trie_dico trie = failwith "trie_dico"
 (*                - un trie                                                   *)
 (*   résultat   : aucun                                                       *)
 (******************************************************************************)
-let affiche p trie = failwith "TO DO affiche"
+let affiche p (Trie(arbre, _, recompose)) = 
+  let rec affiche_liste l = (*fonction auxiliaire qui traite avec la liste fournie par parcours_arbre*)
+    match l with
+    | [] -> () (* Cas de base () = unit*)
+    | h::q ->  p (recompose h); (* Affichage du mot *)
+               print_string " "; (* Affichage d'un espace *)
+               affiche_liste q (*Appel recursif sur la liste fournie par parocurs_arbre*)
+  in affiche_liste (parcours_arbre arbre)
+
+  let _ = affiche print_string trie_sujet (* Test d'affichage dans la console *)
