@@ -122,3 +122,41 @@ let%test _ =  retrait_arbre ['c';'o';'c';'a'] arbre_sujet3 = arbre_sujet3
 let%test _ =  not (appartient_arbre ['b';'a';'s'] (retrait_arbre ['b';'a';'s'] arbre_sujet2))
 let%test _ =  appartient_arbre ['b';'a';'t'] (retrait_arbre ['b';'a';'s'] arbre_sujet2)
 
+
+
+(*********************************************************************************)
+(*   fonction de parcours qui partcourt tout l'arbre afin de renvoyer 
+   chaque mot dans l'orde dans lequel ils apparaissent dans l'arbre.
+   Dans le cas de la figure un du TP4, le premier mot serait bas, puis bat,
+   puis de, puis laid etc jusqu'à long                                           *)
+(*   signature  : parcours_arbre : 'a arbre -> 'a list list                      *)
+(*   paramètres : - arbre : arbre dans lequel afficher les éléments              *)
+(*   résultat   : la liste de élement dans l'ordre lexicographique               *)
+(*********************************************************************************)
+
+let rec parcours_arbre_beta (Noeud(fin, bl)) = (*Version expérimentale (marche mais moche)*)
+   match bl with
+   (* Cas de base :*)
+   | [] -> [[]]
+
+   (* Je mets la lettre de la permière branche sur l'appelle récursif des fils. Le tout concatainné à l'appel récursif sur la queue des branches*)
+   | (c, fils)::q -> (List.map(fun elt -> c::elt) (parcours_arbre_beta fils))@match q with
+                                                                        (* S'il n'y a pas de que je renvoie liste vide pour éviter d'enregistrer tous les mots de l'arbre *)
+                                                                        | [] -> [] 
+                                                                        | h::q ->   if fin then 
+                                                                                       []::parcours_arbre_beta (Noeud(fin, h::q)) (* Si c'est un noeud terminal alors l'ajoute la liste vire pour faire finir le mot*)
+                                                                                    else parcours_arbre_beta (Noeud(fin, h::q)) (*Sinon non*)
+
+
+let rec parcours_arbre (Noeud(fin, bl)) = (*Vesion propre*)
+   match bl with
+   (* Cas de base :*)
+   | [] -> if fin then [[]] else []
+
+   (* Je mets la lettre de la permière branche sur l'appelle récursif des fils. Le tout concatainné à l'appel récursif sur la queue des branches*)
+   | (c, fils)::q -> (List.map(fun elt -> c::elt) (parcours_arbre fils))@parcours_arbre (Noeud(fin,q))
+                     
+let arbre_vide = Noeud(false,[])
+let%test _ =  parcours_arbre arbre_vide = []
+let%test _ =  arbre_sujet2 = List.fold_right ajout_arbre (parcours_arbre arbre_sujet2) (Noeud (false,[]))
+let%test _ =  arbre_sujet3 = List.fold_right ajout_arbre (parcours_arbre arbre_sujet3) (Noeud (false,[]))
