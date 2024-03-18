@@ -160,3 +160,13 @@ let arbre_vide = Noeud(false,[])
 let%test _ =  parcours_arbre arbre_vide = []
 let%test _ =  arbre_sujet2 = List.fold_right ajout_arbre (parcours_arbre arbre_sujet2) (Noeud (false,[]))
 let%test _ =  arbre_sujet3 = List.fold_right ajout_arbre (parcours_arbre arbre_sujet3) (Noeud (false,[]))
+
+
+(*********************************************************************************)
+(*   fonction d'élagage qui partcourt tout l'arbre afin de couper 
+   les branches inutilse i.e. les branches dont les noeuds ne correspondent jamais à un élément *)
+             
+(*   signature  : parcours_arbre : 'a arbre -> 'a arbre                          *)
+(*   paramètres : - arbre : arbre que l'on veut élaguer                          *)
+(*   résultat   : arbre élagué                                                   *)
+(*********************************************************************************)
