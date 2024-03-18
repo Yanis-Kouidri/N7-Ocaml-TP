@@ -156,11 +156,48 @@ let rec parcours_arbre (Noeud(fin, bl)) = (*Vesion propre*)
    (* Je mets la lettre de la permière branche sur l'appelle récursif des fils. Le tout concatainné à l'appel récursif sur la queue des branches*)
    | (c, fils)::q -> (List.map(fun elt -> c::elt) (parcours_arbre fils))@parcours_arbre (Noeud(fin,q))
                      
-let arbre_vide = Noeud(false,[])
-let%test _ =  parcours_arbre arbre_vide = []
+let un_arbre_vide = Noeud(false,[])
+let%test _ =  parcours_arbre un_arbre_vide = []
 let%test _ =  arbre_sujet2 = List.fold_right ajout_arbre (parcours_arbre arbre_sujet2) (Noeud (false,[]))
 let%test _ =  arbre_sujet3 = List.fold_right ajout_arbre (parcours_arbre arbre_sujet3) (Noeud (false,[]))
 
+(* Renvoie true si tous les noeuds de l'arbre sont non terminal (à false), renvoie false sinon*)
+let rec arbre_vide (Noeud(fin, bl)) =
+   match bl with
+   | [] -> not fin
+   | (_,abr)::q -> arbre_vide abr && arbre_vide (Noeud(fin, q))
+
+
+let un_arbre_vide2 = Noeud(false,[ ('c', Noeud(false, [])) ])
+let un_arbre_vide3 = Noeud(false,[ ('c', Noeud(false, [])); ('o', Noeud(false, [])) ])
+let un_arbre_vide4 = Noeud(false,[ ('c', Noeud(false, [('c', Noeud(false, []))])); ('o', Noeud(false, [])) ])
+
+let un_arbre_pas_vide = Noeud(true,[])
+let un_arbre_pas_vide2 = Noeud(true,[ ('c', Noeud(false, [])) ])
+let un_arbre_pas_vide2_bis = Noeud(false,[ ('c', Noeud(true, [])) ])
+let un_arbre_pas_vide3 = Noeud(false,[ ('c', Noeud(false, [])); ('o', Noeud(true, [])) ])
+let un_arbre_pas_vide3_bis = Noeud(false,[ ('c', Noeud(true, [])); ('o', Noeud(false, [])) ])
+let un_arbre_pas_vide4 = Noeud(false,[ ('c', Noeud(false, [('c', Noeud(true, []))])); ('o', Noeud(false, [])) ])
+let un_arbre_pas_vide5 = Noeud(false,[ ('c', Noeud(false, [('c', Noeud(false, []))])); ('o', Noeud(true, [])) ])
+
+
+let un_arbre_pas_vide = Noeud(false,[ ('c', Noeud(true, [])) ])
+let%test _ =  arbre_vide un_arbre_vide = true
+let%test _ =  arbre_vide un_arbre_vide2 = true
+let%test _ =  arbre_vide un_arbre_vide3 = true
+let%test _ =  arbre_vide un_arbre_vide4 = true
+
+let%test _ =  arbre_vide un_arbre_pas_vide = false
+let%test _ =  arbre_vide un_arbre_pas_vide2 = false
+let%test _ =  arbre_vide un_arbre_pas_vide2_bis = false
+let%test _ =  arbre_vide un_arbre_pas_vide3 = false
+let%test _ =  arbre_vide un_arbre_pas_vide4 = false
+let%test _ =  arbre_vide un_arbre_pas_vide5 = false
+
+
+let%test _ =  arbre_vide arbre_sujet = false
+let%test _ =  arbre_vide arbre_sujet2 = false
+let%test _ =  arbre_vide arbre_sujet3 = false
 
 (*********************************************************************************)
 (*   fonction d'élagage qui partcourt tout l'arbre afin de couper 
@@ -170,3 +207,26 @@ let%test _ =  arbre_sujet3 = List.fold_right ajout_arbre (parcours_arbre arbre_s
 (*   paramètres : - arbre : arbre que l'on veut élaguer                          *)
 (*   résultat   : arbre élagué                                                   *)
 (*********************************************************************************)
+
+let rec elagage (Noeud(fin, bl)) = 
+   let bl' = List.filter (fun (_, abr) -> not (arbre_vide abr)) bl in
+   let bl'' = List.map (fun (c, abr) -> (c, elagage abr)) bl' in
+   Noeud(fin, bl'')
+
+
+let%test _ =  elagage un_arbre_vide = Noeud(false,[])
+let%test _ =  elagage un_arbre_vide2 = Noeud(false,[])
+let%test _ =  elagage un_arbre_vide3 = Noeud(false,[])
+let%test _ =  elagage un_arbre_vide4 = Noeud(false,[])
+
+let%test _ =  elagage un_arbre_pas_vide = un_arbre_pas_vide
+let%test _ =  elagage un_arbre_pas_vide2 = Noeud(true, [])
+let%test _ =  elagage un_arbre_pas_vide2_bis = Noeud(false,[ ('c', Noeud(true, [])) ])
+let%test _ =  elagage un_arbre_pas_vide3 = Noeud(false,[('o', Noeud(true, [])) ])
+let%test _ =  elagage un_arbre_pas_vide3_bis = Noeud(false,[('c', Noeud(true, [])) ])
+
+
+
+let%test _ =  elagage (retrait_arbre ['d';'e'] arbre_sujet) <> arbre_sujet
+
+
