@@ -1,4 +1,4 @@
-open Assoc
+(* open Assoc *)
 open Arbre
 open Chaines
 
@@ -87,8 +87,8 @@ let%test _ = appartient "bas" (retrait "lai" trie_sujet) = true
 (*   paramètre(s) : le trie                                                   *)
 (*   résultat     : la liste des mots                                         *)
 (******************************************************************************)
-let trie_dico trie = failwith "trie_dico"
-
+(* let trie_dico trie = failwith "trie_dico"
+ *)
 (******************************************************************************)
 (* procédure d'affichage d'un trie                                            *)
 (*   signature  : affiche : ('a -> unit) -> ('a, 'b) trie -> unit = <fun>     *)

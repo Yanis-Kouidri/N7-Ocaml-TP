@@ -179,9 +179,9 @@ let un_arbre_pas_vide3 = Noeud(false,[ ('c', Noeud(false, [])); ('o', Noeud(true
 let un_arbre_pas_vide3_bis = Noeud(false,[ ('c', Noeud(true, [])); ('o', Noeud(false, [])) ])
 let un_arbre_pas_vide4 = Noeud(false,[ ('c', Noeud(false, [('c', Noeud(true, []))])); ('o', Noeud(false, [])) ])
 let un_arbre_pas_vide5 = Noeud(false,[ ('c', Noeud(false, [('c', Noeud(false, []))])); ('o', Noeud(true, [])) ])
+let un_arbre_pas_vide6 = Noeud(false,[ ('c', Noeud(true, [])) ])
 
 
-let un_arbre_pas_vide = Noeud(false,[ ('c', Noeud(true, [])) ])
 let%test _ =  arbre_vide un_arbre_vide = true
 let%test _ =  arbre_vide un_arbre_vide2 = true
 let%test _ =  arbre_vide un_arbre_vide3 = true
@@ -193,6 +193,7 @@ let%test _ =  arbre_vide un_arbre_pas_vide2_bis = false
 let%test _ =  arbre_vide un_arbre_pas_vide3 = false
 let%test _ =  arbre_vide un_arbre_pas_vide4 = false
 let%test _ =  arbre_vide un_arbre_pas_vide5 = false
+let%test _ =  arbre_vide un_arbre_pas_vide6 = false
 
 
 let%test _ =  arbre_vide arbre_sujet = false
@@ -209,9 +210,9 @@ let%test _ =  arbre_vide arbre_sujet3 = false
 (*********************************************************************************)
 
 let rec elagage (Noeud(fin, bl)) = 
-   let bl' = List.filter (fun (_, abr) -> not (arbre_vide abr)) bl in
-   let bl'' = List.map (fun (c, abr) -> (c, elagage abr)) bl' in
-   Noeud(fin, bl'')
+      let l = List.filter (fun (_,a) -> not (arbre_vide a)) bl in 
+      let l' = List.map (fun (x, a) -> (x, elagage a)) l in
+      Noeud(fin, l')
 
 
 let%test _ =  elagage un_arbre_vide = Noeud(false,[])
@@ -224,6 +225,12 @@ let%test _ =  elagage un_arbre_pas_vide2 = Noeud(true, [])
 let%test _ =  elagage un_arbre_pas_vide2_bis = Noeud(false,[ ('c', Noeud(true, [])) ])
 let%test _ =  elagage un_arbre_pas_vide3 = Noeud(false,[('o', Noeud(true, [])) ])
 let%test _ =  elagage un_arbre_pas_vide3_bis = Noeud(false,[('c', Noeud(true, [])) ])
+let%test _ =  elagage un_arbre_pas_vide4 = Noeud(false,
+                                             [ ('c', Noeud(false, [('c', Noeud(true, []))]))])
+let%test _ =  elagage un_arbre_pas_vide5 = Noeud(false,
+                                             [ ('o', Noeud(true, [])) ])
+let%test _ =  elagage un_arbre_pas_vide6 = un_arbre_pas_vide6
+
 
 
 
